@@ -94,7 +94,6 @@
             this.Name = "TextConvertion";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Text Convertion";
-            this.Load += new System.EventHandler(this.TextConvertion_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

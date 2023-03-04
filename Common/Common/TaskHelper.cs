@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Common
+﻿namespace Common
 {
     /// <summary>
     /// Provides functions to work with text. Inherits <see cref="MarshalByRefObject"/>.

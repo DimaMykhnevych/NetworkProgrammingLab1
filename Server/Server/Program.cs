@@ -1,45 +1,36 @@
-﻿using System;
-using System.Runtime.Remoting;
-using System.Runtime.Remoting.Channels;
-using System.Runtime.Remoting.Channels.Http;
-using Common; // Library with necessary logic.
+using Common; // Required library with implementation.
 
-namespace Server
+// Builder that is using to build the web application.
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+
+// Adding controllers.
+builder.Services.AddControllers();
+// Adding Swagger/OpenAPI for documentation.
+builder.Services.AddSwaggerGen();
+
+// Make sure Common.dll is present in bin/Debug/net6.0 folder.
+// Registering our TaskHelper from Common library as Singleton.
+// Singleton = the same object instance will be used.
+builder.Services.AddSingleton(new TaskHelper());
+
+// Getting build result.
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
 {
-    /// <summary>
-    /// Represents entry point to the server.
-    /// </summary>
-    internal class Program
-    {
-        /// <summary>
-        /// The main method of the server.
-        /// </summary>
-        /// <param name="args">Arguments passed to the server.</param>
-        static void Main(string[] args)
-        {
-            // The name of server endpoint.
-            const string endpointName = "TextFunctions.soap";
-
-            // Creating channel between server and client.
-            // 5000 - port number
-            HttpChannel ch = new HttpChannel(5000);
-
-            // Registering channel ch with the help of RegisterChannel method.
-            // false - disabling security
-            ChannelServices.RegisterChannel(ch, false);
-
-            // Registering the serveice as Well-known object.
-            // Singleton = every incoming message is serviced by the same object instance.
-            RemotingConfiguration.RegisterWellKnownServiceType(
-                typeof(TaskHelper),
-                endpointName,
-                WellKnownObjectMode.Singleton);
-
-            // Notyfing about successful service start.
-            Console.WriteLine("TextFunctions service is ready...");
-
-            // Running the service until <Enter> key clicked.
-            Console.ReadLine();
-        }
-    }
+    // Using Swagger along with SwaggerUI.
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
+
+// Using authorization (none by default).
+app.UseAuthorization();
+
+// Mapping controllers to actual routes.
+app.MapControllers();
+
+// Running the WEB App.
+app.Run();
